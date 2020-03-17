@@ -15,5 +15,17 @@ class CheckingAccount {
 
 	}
 
+	public function __get($attribute)
+	{
+		Validation::protectAttribute($attribute);
+		return $this->$attribute;
+	}
+	
+	public function __set($attribute, $value)
+	{
+
+		Validation::protectAttribute($attribute);
+		$this->$attribute = $value;
+	}
 
 }
