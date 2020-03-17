@@ -34,5 +34,12 @@ class CheckingAccount {
 		$this->saldo = $this->saldo - $valor;
 		return $this;
 	}
-	
+
+
+	public function deposit($value) 
+	{
+		Validation::verifyNumeric($value);
+		$this->saldo = $this->saldo + $valor;
+		return $this;
+	}
 }
