@@ -42,4 +42,8 @@ class CheckingAccount {
 		$this->saldo = $this->saldo + $valor;
 		return $this;
 	}
+
+	public function formatBalance() 
+	{
+		return "R$" . number_format($this->saldo, 2, ",", ".");
 }
