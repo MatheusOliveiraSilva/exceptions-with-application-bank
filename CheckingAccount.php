@@ -28,4 +28,11 @@ class CheckingAccount {
 		$this->$attribute = $value;
 	}
 
+	public function withdraw($value) 
+	{
+		Validation::verifyNumeric($value);
+		$this->saldo = $this->saldo - $valor;
+		return $this;
+	}
+	
 }
