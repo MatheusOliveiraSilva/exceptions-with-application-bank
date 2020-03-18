@@ -15,6 +15,7 @@ class CheckingAccount {
 		$this->number = $number;
 		$this->balance = $balance;
 
+		self::$totalOfAccounts++;
 		try {
 			self::$operationTax = intDiv(30, self::$totalOfAccounts);
 		} catch(Error $e) {
@@ -22,7 +23,6 @@ class CheckingAccount {
 			exit;
 		}
 
-		self::$totalOfAccounts++;
 
 	}
 
@@ -53,6 +53,18 @@ class CheckingAccount {
 		$this->saldo = $this->saldo + $valor;
 		return $this;
 	}
+
+	public function transfer($value, CheckingAccoumt $account){                                                                                                         if(!is_numeric($value)){
+                        echo "It should be a number";
+                        exit;
+                }
+
+                $this->sacar($valor);
+
+                $contaCorrente->deposit($value);
+
+                return $this;
+                                                              }
 
 	public function formatBalance() 
 	{

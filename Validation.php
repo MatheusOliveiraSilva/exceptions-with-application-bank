@@ -2,10 +2,10 @@
 
 class Validation
 {
-	public static function protectAttribute($atrribute)
+	public static function protectAttribute($attribute)
 	{
 		if($attribute == 'holder' || $attribute == 'balance') {
-			throw new Exception("The attribute {$attribute} is private";
+			throw new Exception("The attribute {$attribute} is private");
 
 		}
 
