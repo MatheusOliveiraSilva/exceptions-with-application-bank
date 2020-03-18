@@ -56,11 +56,13 @@ class CheckingAccount {
 		return $this;
 	}
 
-	public function transfer($value, CheckingAccoumt $account){                                                                                                         if(!is_numeric($value)){
-                        echo "It should be a number";
-                        exit;
+	public function transfer($value, CheckingAccount $account){                                                                                                         if(!is_numeric($value)){
+		throw new InvalidArgumentException("Just numeric values are allowed");
                 }
 
+		if($value <= 0) {
+			throw new Exception("The value should to be bigger than 0");
+		}
                 $this->sacar($valor);
 
                 $contaCorrente->deposit($value);
