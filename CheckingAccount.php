@@ -16,14 +16,16 @@ class CheckingAccount {
 		$this->balance = $balance;
 
 		self::$totalOfAccounts++;
+
 		try {
-			self::$operationTax = intDiv(30, self::$totalOfAccounts);
-		} catch(Error $e) {
-			echo "It's not possible to divide by 0";
+			if(self::$totalOfAccounts < 1) {
+				throw new Exception("Valor inferior a zero");
+			}
+			self::$operationTax =30/ self::$totalOfAccounts;
+		} catch(Exception $e) {
+			echo $e->getMessage();
 			exit;
 		}
-
-
 	}
 
 	public function __get($attribute)
