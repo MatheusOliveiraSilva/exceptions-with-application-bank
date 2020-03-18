@@ -5,6 +5,8 @@ class CheckingAccount {
 	public $agency;
 	private $number;
 	private $balance;
+	public static $totalOfAccounts;
+	public static $operationTax;
 
 	public function __construct($holder, $agency, $number, $balance) 
 	{
@@ -12,6 +14,15 @@ class CheckingAccount {
 		$this->agency = $agency;
 		$this->number = $number;
 		$this->balance = $balance;
+
+		try {
+			self::$operationTax = intDiv(30, self::$totalOfAccounts);
+		} catch(Error $e) {
+			echo "It's not possible to divide by 0";
+			exit;
+		}
+
+		self::$totalOfAccounts++;
 
 	}
 
@@ -46,4 +57,26 @@ class CheckingAccount {
 	public function formatBalance() 
 	{
 		return "R$" . number_format($this->saldo, 2, ",", ".");
+	}
+
+	public function __toString()
+	{
+		return $this->saldo;
+	}
+
+	public function setNumber($number) 
+	{
+		return $this->number;
+	}
+
+
+	public function getHolder()
+	{
+		return $this->holder;
+	}
+
+	public function getBalance()
+	{
+		return $this->formatBalance();
+	}
 }
