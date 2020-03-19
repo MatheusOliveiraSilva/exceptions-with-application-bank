@@ -14,7 +14,7 @@ class Validation
 	public static function verifyNumeric($value) 
 	{
 		if(!is_numeric($value)) {
-			throw new Exception("The value is not numeric");
+			throw new InvalidArgumentException("The value is not numeric");
 		}
 	}
 }

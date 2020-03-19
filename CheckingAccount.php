@@ -1,4 +1,5 @@
 <?php
+require 'exception/InsufficientBalanceException.php';
 class CheckingAccount {
 
 	private $holder;
@@ -9,7 +10,7 @@ class CheckingAccount {
 	public static $operationTax;
 
 	public function __construct($holder, $agency, $number, $balance) 
-	{
+		{
 		$this->holder = $holder;
 		$this->agency = $agency;
 		$this->number = $number;
@@ -19,7 +20,7 @@ class CheckingAccount {
 
 		try {
 			if(self::$totalOfAccounts < 1) {
-				throw new Exception("Valor inferior a zero");
+				throw new Exception("The value is smaller than 0");
 			}
 			self::$operationTax =30/ self::$totalOfAccounts;
 		} catch(Exception $e) {
@@ -33,7 +34,7 @@ class CheckingAccount {
 		Validation::protectAttribute($attribute);
 		return $this->$attribute;
 	}
-	
+
 	public function __set($attribute, $value)
 	{
 
@@ -44,7 +45,10 @@ class CheckingAccount {
 	public function withdraw($value) 
 	{
 		Validation::verifyNumeric($value);
-		$this->saldo = $this->saldo - $valor;
+		if($value > $this->balance) {
+			throw new InsufficientBalanceException("There is no sufficient money in your account!!!");
+		}
+		$this->balance = $this->balance - $value;
 		return $this;
 	}
 
@@ -52,32 +56,32 @@ class CheckingAccount {
 	public function deposit($value) 
 	{
 		Validation::verifyNumeric($value);
-		$this->saldo = $this->saldo + $valor;
+		$this->balance = $this->balance + $value;
 		return $this;
 	}
 
-	public function transfer($value, CheckingAccount $account){                                                                                                         if(!is_numeric($value)){
-		throw new InvalidArgumentException("Just numeric values are allowed");
-                }
+	public function transfer($value, CheckingAccount $account)
+	{  
+		Validation::verifyNumeric($value);
 
 		if($value <= 0) {
 			throw new Exception("The value should to be bigger than 0");
 		}
-                $this->sacar($valor);
+		$this->sacar($value);
 
-                $contaCorrente->deposit($value);
+		$contaCorrente->deposit($value);
 
-                return $this;
-                                                              }
-
+		return $this;
+	}
+	
 	public function formatBalance() 
 	{
-		return "R$" . number_format($this->saldo, 2, ",", ".");
+		return "R$" . number_format($this->balance, 2, ",", ".");
 	}
 
 	public function __toString()
 	{
-		return $this->saldo;
+		return $this->balance;
 	}
 
 	public function setNumber($number) 

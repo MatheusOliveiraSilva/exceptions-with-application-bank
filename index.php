@@ -12,22 +12,13 @@ $mariaAccount = new CheckingAccount('Maria', 2010, '4410-10', 20000.00);
 
 $josephAccount = new CheckingAccount('Joseph', 2810, '5510-10', 45000.00);
 
+$johnAccount->deposit(100);
 
-
-
-
-
-
-try { 
-	$johnAccount->transfer(true, $mariaAccount);
-} catch(Exception $e) {
-	echo $e->getMessage();
-}
 
 echo PHP_EOL;
 
 try { 
-	$johnAccount->transfer(0, $mariaAccount);
+	$johnAccount->withdraw(99999);
 } catch(Exception $e) {
 	echo $e->getMessage();
 }
