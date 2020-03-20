@@ -1,5 +1,7 @@
 <?php
-require 'exception/InsufficientBalanceException.php';
+use exception\InsufficientBalanceException;
+
+// require 'exception\InsufficientBalanceException.php';
 class CheckingAccount {
 
 	private $holder;
@@ -20,10 +22,10 @@ class CheckingAccount {
 
 		try {
 			if(self::$totalOfAccounts < 1) {
-				throw new Exception("The value is smaller than 0");
+				throw new \Exception("The value is smaller than 0");
 			}
 			self::$operationTax =30/ self::$totalOfAccounts;
-		} catch(Exception $e) {
+		} catch(\Exception $e) {
 			echo $e->getMessage();
 			exit;
 		}
@@ -65,7 +67,7 @@ class CheckingAccount {
 		Validation::verifyNumeric($value);
 
 		if($value <= 0) {
-			throw new Exception("The value should to be bigger than 0");
+			throw new \Exception("The value should to be bigger than 0");
 		}
 		$this->sacar($value);
 

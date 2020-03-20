@@ -1,5 +1,6 @@
 <?php
-class InsufficientBalanceException extends Exception 
+namespace exception;
+class InsufficientBalanceException extends \Exception 
 {
     public function __construct($message, $code = null, $exception = null) 
     {
