@@ -49,7 +49,7 @@ class CheckingAccount {
 	{
 		Validation::verifyNumeric($value);
 		if($value > $this->balance) {
-			throw new InsufficientBalanceException("There is no sufficient money in your account!!!");
+			throw new InsufficientBalanceException("There is no sufficient money in your account!!!", $value, $this->balance);
 		}
 		$this->balance = $this->balance - $value;
 		return $this;

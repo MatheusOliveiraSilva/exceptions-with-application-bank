@@ -1,9 +1,21 @@
 <?php
 namespace exception;
+
 class InsufficientBalanceException extends \Exception 
 {
-    public function __construct($message, $code = null, $exception = null) 
+    private $value;
+    private $balance;
+
+    public function __construct($message, $value, $balance) 
     {
-        parent::__construct($message, $code = null, $exception = null);
+        $this->value = $value;
+        $this->balance = $balance;
+
+        parent::__construct($message, null, null);
+    }
+
+    public function __get($param)
+    {
+        return $this->$param;
     }
 }

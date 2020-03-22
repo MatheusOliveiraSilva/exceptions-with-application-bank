@@ -19,7 +19,7 @@ try {
 	$johnAccount->withdraw(99999);
 } catch(\exception\InsufficientBalanceException $e) {
 	$johnAccount->withdrawalsNotAlloweds++;
-	echo $e->getMessage();
+	echo $e->getMessage() . " | Balance into account: " . $e->balance . " | Value of withdraw: " . $e->value ;
 } catch(Exception $e) {
 	echo $e->getMessage();	
 }
