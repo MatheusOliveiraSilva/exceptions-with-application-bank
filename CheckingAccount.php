@@ -11,6 +11,7 @@ class CheckingAccount {
 	public static $totalOfAccounts;
 	public static $operationTax;
 	public $withdrawalsNotAlloweds;
+	public static $operationNotRealized;
 
 	public function __construct($holder, $agency, $number, $balance) 
 		{
@@ -65,16 +66,21 @@ class CheckingAccount {
 
 	public function transfer($value, CheckingAccount $account)
 	{  
-		Validation::verifyNumeric($value);
+		try {
+			Validation::verifyNumeric($value);
 
-		if($value <= 0) {
-			throw new \Exception("The value should to be bigger than 0");
+			if($value <= 0) {
+				throw new \Exception("The value should to be bigger than 0");
+			}
+			$this->sacar($value);
+
+			$contaCorrente->deposit($value);
+
+			return $this;
+		} catch(\Exception $e) {
+			self::$operationNotRealized++;
+			throw new exception\OperationNotRealizedException("Operation not realized", 55, $e);
 		}
-		$this->sacar($value);
-
-		$contaCorrente->deposit($value);
-
-		return $this;
 	}
 	
 	public function formatBalance() 
