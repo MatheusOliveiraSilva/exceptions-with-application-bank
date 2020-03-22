@@ -17,6 +17,12 @@ echo PHP_EOL;
 
 try { 
 	$johnAccount->withdraw(99999);
-} catch(\Exception $e) {
+} catch(\exception\InsufficientBalanceException $e) {
+	$johnAccount->withdrawalsNotAlloweds++;
 	echo $e->getMessage();
+} catch(Exception $e) {
+	echo $e->getMessage();	
 }
+
+echo PHP_EOL;
+var_dump($johnAccount);

@@ -10,6 +10,7 @@ class CheckingAccount {
 	private $balance;
 	public static $totalOfAccounts;
 	public static $operationTax;
+	public $withdrawalsNotAlloweds;
 
 	public function __construct($holder, $agency, $number, $balance) 
 		{
