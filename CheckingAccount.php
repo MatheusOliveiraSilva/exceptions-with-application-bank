@@ -67,6 +67,13 @@ class CheckingAccount {
 	public function transfer($value, CheckingAccount $account)
 	{  
 		try {
+
+			$file = new FileReading("logTransfer.txt");
+
+			$file->openFile();
+			$file->writeFile();
+
+
 			Validation::verifyNumeric($value);
 
 			if($value <= 0) {
@@ -75,11 +82,15 @@ class CheckingAccount {
 			$this->sacar($value);
 
 			$contaCorrente->deposit($value);
+			$file->closeFile();
 
 			return $this;
 		} catch(\Exception $e) {
 			self::$operationNotRealized++;
 			throw new exception\OperationNotRealizedException("Operation not realized", 55, $e);
+		} finally {
+			echo "finally";
+			$file->closeFile();
 		}
 	}
 	
