@@ -1,4 +1,7 @@
 <?php
+use exception\InsufficientBalanceException;
+
+// require 'exception\InsufficientBalanceException.php';
 class CheckingAccount {
 
 	private $holder;
@@ -7,9 +10,11 @@ class CheckingAccount {
 	private $balance;
 	public static $totalOfAccounts;
 	public static $operationTax;
+	public $withdrawalsNotAlloweds;
+	public static $operationNotRealized;
 
 	public function __construct($holder, $agency, $number, $balance) 
-	{
+		{
 		$this->holder = $holder;
 		$this->agency = $agency;
 		$this->number = $number;
@@ -19,10 +24,10 @@ class CheckingAccount {
 
 		try {
 			if(self::$totalOfAccounts < 1) {
-				throw new Exception("Valor inferior a zero");
+				throw new \Exception("The value is smaller than 0");
 			}
 			self::$operationTax =30/ self::$totalOfAccounts;
-		} catch(Exception $e) {
+		} catch(\Exception $e) {
 			echo $e->getMessage();
 			exit;
 		}
@@ -33,7 +38,7 @@ class CheckingAccount {
 		Validation::protectAttribute($attribute);
 		return $this->$attribute;
 	}
-	
+
 	public function __set($attribute, $value)
 	{
 
@@ -44,7 +49,10 @@ class CheckingAccount {
 	public function withdraw($value) 
 	{
 		Validation::verifyNumeric($value);
-		$this->saldo = $this->saldo - $valor;
+		if($value > $this->balance) {
+			throw new InsufficientBalanceException("There is no sufficient money in your account!!!", $value, $this->balance);
+		}
+		$this->balance = $this->balance - $value;
 		return $this;
 	}
 
@@ -52,32 +60,48 @@ class CheckingAccount {
 	public function deposit($value) 
 	{
 		Validation::verifyNumeric($value);
-		$this->saldo = $this->saldo + $valor;
+		$this->balance = $this->balance + $value;
 		return $this;
 	}
 
-	public function transfer($value, CheckingAccount $account){                                                                                                         if(!is_numeric($value)){
-		throw new InvalidArgumentException("Just numeric values are allowed");
-                }
+	public function transfer($value, CheckingAccount $account)
+	{  
+		try {
 
-		if($value <= 0) {
-			throw new Exception("The value should to be bigger than 0");
+			$file = new FileReading("logTransfer.txt");
+
+			$file->openFile();
+			$file->writeFile();
+
+
+			Validation::verifyNumeric($value);
+
+			if($value <= 0) {
+				throw new \Exception("The value should to be bigger than 0");
+			}
+			$this->sacar($value);
+
+			$contaCorrente->deposit($value);
+			$file->closeFile();
+
+			return $this;
+		} catch(\Exception $e) {
+			self::$operationNotRealized++;
+			throw new exception\OperationNotRealizedException("Operation not realized", 55, $e);
+		} finally {
+			echo "finally";
+			$file->closeFile();
 		}
-                $this->sacar($valor);
-
-                $contaCorrente->deposit($value);
-
-                return $this;
-                                                              }
-
+	}
+	
 	public function formatBalance() 
 	{
-		return "R$" . number_format($this->saldo, 2, ",", ".");
+		return "R$" . number_format($this->balance, 2, ",", ".");
 	}
 
 	public function __toString()
 	{
-		return $this->saldo;
+		return $this->balance;
 	}
 
 	public function setNumber($number) 
